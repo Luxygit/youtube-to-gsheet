@@ -6,5 +6,5 @@ Script created using Google Apps Script and the Youtube Data API v3.
 - For now, we need to add youtube video ID's manually in the first column to fetch its stats.
 
 Documentation:
-https://developers.google.com/youtube/v3/docs/channels
-https://developers.google.com/youtube/v3/docs/videos
+- https://developers.google.com/youtube/v3/docs/channels
+- https://developers.google.com/youtube/v3/docs/videos
