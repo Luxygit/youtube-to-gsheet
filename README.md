@@ -1,6 +1,6 @@
 # youtube-to-gsheet
 
-Script created using Google Apps Script and the Youtube Data Api v3.
+Script created using Google Apps Script and the Youtube Data API v3.
 
 - Set to trigger automatically every time the sheet is modified.
 - For now, we need to add youtube video ID's manually in the first column to fetch its stats.
