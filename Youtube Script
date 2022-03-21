@@ -1,0 +1,34 @@
+function getYoutube() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var range = sheet.getRange(2,1, sheet.getLastRow() -1);
+
+  var vid = range.getValues();
+
+//Logger.log(vid);
+
+  var links = vid.map(function(res){ return res[0];}).join(",");
+
+Logger.log(links);
+
+var stats_vid= YouTube.Videos.list("snippet, statistics, status", {id: links});
+
+//Logger.log(stats_vid);
+
+var details = stats_vid.items.map(function (s) {return [s.snippet.title];});
+
+Logger.log(details)
+
+var final_stats =  stats_vid.items.map(function(res){return [res.statistics.viewCount, res.statistics.likeCount, res.statistics.commentCount, res.status.uploadStatus]})
+
+Logger.log(final_stats)
+
+sheet.getRange(2,3, details.length,details[0].length).setValues(details);
+//Logger.log("Tittle added");
+
+var hyperlink = vid.map(function (l){return ["https://www.youtube.com/watch?v=" + l];});
+Logger.log(hyperlink);
+sheet.getRange(2,2, vid.length,vid[0].length).setValues(hyperlink);
+
+sheet.getRange(2,4, final_stats.length,final_stats[0].length).setValues(final_stats);
+
+}
