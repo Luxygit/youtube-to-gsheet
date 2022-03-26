@@ -1,34 +1,39 @@
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('Script').addItem('Update', 'getYoutube').addToUi();
+}
+
 function getYoutube() {
   var sheet = SpreadsheetApp.getActiveSheet();
-  var range = sheet.getRange(2,1, sheet.getLastRow() -1);
+  var range = sheet.getRange(1,1);
 
   var vid = range.getValues();
+  var videoID = vid[0];
 
-//Logger.log(vid);
+var dataLiveVid = YouTube.LiveBroadcasts.list("snippet", {id: videoID});
 
-  var links = vid.map(function(res){ return res[0];}).join(",");
+//Logger.log(dataLiveVid);
 
-Logger.log(links);
+var liveChat = dataLiveVid.items[0].snippet.liveChatId;
 
-var stats_vid= YouTube.Videos.list("snippet, statistics, status", {id: links});
+//Logger.log(liveChat);
 
-//Logger.log(stats_vid);
+var liveChatMessages = YouTube.LiveChatMessages.list(liveChatId=liveChat, part="snippet, authorDetails");
 
-var details = stats_vid.items.map(function (s) {return [s.snippet.title];});
+//Logger.log(liveChatMessages);
 
-Logger.log(details)
+var messages = liveChatMessages.items.map(function (m) {return [m.snippet.textMessageDetails.messageText]})
 
-var final_stats =  stats_vid.items.map(function(res){return [res.statistics.viewCount, res.statistics.likeCount, res.statistics.commentCount, res.status.uploadStatus]})
+var author = liveChatMessages.items.map(function (m) {return [m.authorDetails.displayName]})
 
-Logger.log(final_stats)
+var timestamp = liveChatMessages.items.map(function (m) {return [m.snippet.publishedAt]})
+Logger.log(timestamp[0]);
 
-sheet.getRange(2,3, details.length,details[0].length).setValues(details);
-//Logger.log("Tittle added");
 
-var hyperlink = vid.map(function (l){return ["https://www.youtube.com/watch?v=" + l];});
-Logger.log(hyperlink);
-sheet.getRange(2,2, vid.length,vid[0].length).setValues(hyperlink);
 
-sheet.getRange(2,4, final_stats.length,final_stats[0].length).setValues(final_stats);
+sheet.getRange(2,2, messages.length,messages[0].length).setValues(messages);
 
+sheet.getRange(2,3, messages.length,messages[0].length).setValues(author);
+
+sheet.getRange(2,4, messages.length,messages[0].length).setValues(timestamp);
 }
